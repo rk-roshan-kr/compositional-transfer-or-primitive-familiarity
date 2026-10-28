@@ -113,3 +113,23 @@ def test_independent_task_reference_validation():
                 f"Task reference discrepancy in {task_name} for input {inp}: "
                 f"reference computed {actual}, but task expected {expected}"
             )
+
+
+def test_flat_cost_prior_equivalence():
+    """Verify that FlatCostPrior (ln 1/21) behaves identically to UniformPrior on held-out tasks."""
+    import math
+    from scripts.prior_controls import FlatCostPrior, UniformPrior, search_task, HELDOUT_10_SEQUENCE
+
+    fc = FlatCostPrior()
+    unif = UniformPrior()
+
+    assert fc.log_prob(("len", 0, "ListExpr"), "map") == math.log(1.0 / 21.0)
+    assert fc.log_prob(("map", 0, "ScalarOp"), "add1") == math.log(1.0 / 21.0)
+
+    # Verify identical execution counts on subset of tasks (H01, H04, H06)
+    for t_name in ["H01_filter_odds", "H04_count_evens", "H06_sum_evens"]:
+        res_fc = search_task(t_name, TASKS[t_name], fc, budget_k=500)
+        res_unif = search_task(t_name, TASKS[t_name], unif, budget_k=500)
+        assert res_fc["executions"] == res_unif["executions"], (
+            f"Equivalence mismatch on {t_name}: FlatCost={res_fc['executions']}, Uniform={res_unif['executions']}"
+        )

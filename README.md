@@ -1,6 +1,6 @@
 # Compositional Transfer or Primitive Familiarity? What a Count-Based Prior Explains in a Typed Functional DSL
 
-[![Tests](https://img.shields.io/badge/tests-4%2F4%20passed-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/tests-5%2F5%20passed-brightgreen.svg)]()
 [![Paper](https://img.shields.io/badge/paper-camera--ready%20PDF%20(6%20pages)-blue.svg)](paper/paper.pdf)
 [![Python](https://img.shields.io/badge/python-3.9+-blue.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -96,7 +96,7 @@ compositional-transfer-or-primitive-familiarity/
 │   ├── references.bib                  # 36 DBLP/ACM verified bibliographic records
 │   ├── publication_checklist.md        # 6-block operational research checklist
 │   ├── ledger.md                       # Internal scope & commit freeze ledger
-│   └── preview/                        # High-resolution PNG page previews (1-8)
+│   └── preview/                        # High-resolution PNG page previews (1-6)
 ├── src/
 │   └── compositional_transfer/         # Reusable Python library
 │       └── __init__.py                 # Core package exports
