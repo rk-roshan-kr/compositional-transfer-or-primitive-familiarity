@@ -1,0 +1,25 @@
+======================================================================
+Path A Uniform Canonical Enumeration Pilot (10 Held-Out Tasks)
+Execution Budget Cap: K = 500 per task
+======================================================================
+Total well-typed candidate programs in search space: 3799
+----------------------------------------------------------------------
+Task: H01_filter_odds            | Solved: yes | Executions:   15 | Solution: filter(lambda x: (not (x % 2 == 0)), xs)
+Task: H02_double_evens           | Solved: yes | Executions:  115 | Solution: map(lambda x: (x * 2), filter(lambda x: (x % 2 == 0), xs))
+Task: H03_add_two_positives      | Solved: yes | Executions:   70 | Solution: map(lambda x: (x + 2), filter(lambda x: (x > 0), xs))
+Task: H04_count_evens            | Solved: yes | Executions:   31 | Solution: len(filter(lambda x: (x % 2 == 0), xs))
+Task: H05_count_odds             | Solved: yes | Executions:   32 | Solution: len(filter(lambda x: (not (x % 2 == 0)), xs))
+Task: H06_sum_evens              | Solved: yes | Executions:  241 | Solution: fold(0, lambda acc, x: acc + x, filter(lambda x: (x % 2 == 0), xs))
+Task: H07_sum_positives          | Solved: yes | Executions:  238 | Solution: fold(0, lambda acc, x: acc + x, filter(lambda x: (x > 0), xs))
+Task: H08_double_positive_evens  | Solved: no  | Executions:  500
+Task: H09_sum_doubled_evens      | Solved: no  | Executions:  500
+Task: H10_sum_add1_evens         | Solved: no  | Executions:  500
+----------------------------------------------------------------------
+Summary:
+  Solved: 7 / 10 (70.0%)
+  Mean Executions: 224.2 (unsolved capped at 500)
+======================================================================
+Note: Evaluations were executed using in-process AST reference interpreter.
+Execution counts reflect program evaluations on the 5 visible cases,
+not isolated subprocess sandbox runs.
+======================================================================

@@ -1,0 +1,118 @@
+======================================================================================
+Path A Prior Isolation Controls: scripts/prior_controls.py
+Evaluating 4 Best-First Search Arms alongside Canonical Enumeration Baseline
+Execution Budget Cap: K = 500 | Parsimony Penalty lambda = 0.05
+======================================================================================
+Loaded exactly 22 training transitions from T01-T10.
+
+Training Marginal Primitive Counts (22 total transitions):
+  IntExpr   : len: 2, fold: 2
+  ListExpr  : map: 4, filter: 4
+  ScalarOp  : id: 0, add1: 1, add2: 1, add3: 0, sub1: 0, mul2: 2, mul3: 0
+  Predicate : eq0: 0, gt0: 2, ge0: 1, lt0: 0, even: 1, odd: 0, mod3_0: 0
+  Reducer   : add: 2, sub: 0, mul: 0
+--------------------------------------------------------------------------------------
+
+Evaluating Held-Out Benchmark H01-H10:
+
+Task                       | Enum   | Uniform  | Unigram  | Bi (Free) | Bi (Priced) | Hidden 20/20
+--------------------------------------------------------------------------------------
+H01_filter_odds            |     15 |        8 |       11 |        11 |          11 | All 20/20
+H02_double_evens           |    115 |      171 |       32 |        32 |          32 | All 20/20
+H03_add_two_positives      |     70 |      131 |       30 |        30 |          30 | All 20/20
+H04_count_evens            |     31 |        6 |        7 |         6 |           6 | All 20/20
+H05_count_odds             |     32 |       11 |       20 |        15 |          15 | All 20/20
+H06_sum_evens              |    241 |       20 |       13 |        19 |          19 | All 20/20
+H07_sum_positives          |    238 |       21 |       11 |        18 |          18 | All 20/20
+H08_double_positive_evens  |   500* |     500* |      244 |       244 |         244 | All 20/20
+H09_sum_doubled_evens      |   500* |      412 |      113 |        79 |          79 | All 20/20
+H10_sum_add1_evens         |   500* |      348 |      157 |       117 |         117 | All 20/20
+--------------------------------------------------------------------------------------
+Solved (out of 10)         |      7 |        9 |       10 |        10 |          10 |
+Mean Executions (cap 500)  |  224.2 |    162.8 |     63.8 |      57.1 |        57.1 |
+--------------------------------------------------------------------------------------
+Uncensored Mean (Full Space) |  884.3 |    208.3 |     63.8 |      57.1 |
+Uncensored Median (Full Space) |  176.5 |     76.0 |     25.0 |      24.5 |
+
+Exact Causal Attribution Breakdown (Full Uncensored Space):
+  --- MEAN-BASED ATTRIBUTION ---
+  Total BFS -> Bigram Search Reduction: 827.2 evaluations
+  1. Priority Queue Mechanics alone (BFS -> Uniform): 676.0 eval (81.7% of total reduction)
+  2. Added Prior Guidance Total (Uniform -> Bigram): 151.2 eval
+     - Captured by Type-Conditioned Unigram: 144.5 eval (95.6% of prior reduction)
+     - Added by Bigram Transition Context: 6.7 eval (4.4% of prior reduction, only 6.7 evals)
+  --- MEDIAN-BASED ATTRIBUTION ---
+  Total BFS -> Bigram Search Reduction: 152.0 evaluations
+  1. Priority Queue Mechanics alone (BFS -> Uniform): 100.5 eval (66.1% of total reduction)
+  2. Added Prior Guidance Total (Uniform -> Bigram): 51.5 eval
+     - Captured by Type-Conditioned Unigram: 51.0 eval (99.0% of prior reduction)
+     - Added by Bigram Transition Context: 0.5 eval (1.0% of prior reduction, only 0.5 evals)
+======================================================================================
+
+Evaluating Unseen Primitives Benchmark (U01-U04):
+Tasks constructed from primitives with count = 0 in training (mul3, sub1, mod3_0, odd)
+--------------------------------------------------------------------------------------
+
+Unseen Task                | Enum   | Uniform  | Unigram  | Bi (Free) | Bi (Priced) | Hidden 20/20
+--------------------------------------------------------------------------------------
+U01_triple_odds            |    130 |      112 |      186 |       186 |         186 | All 20/20
+U02_sub1_evens             |    101 |      113 |      144 |       144 |         144 | All 20/20
+U03_sum_mod3               |    243 |       24 |       31 |        39 |          39 | All 20/20
+U04_triple_sub1_odds       |   500* |     500* |     500* |      500* |        500* | 
+--------------------------------------------------------------------------------------
+Mean Executions (U01-U04)  |  243.5 |    187.2 |    215.2 |     217.2 |       217.2 |
+--------------------------------------------------------------------------------------
+Uncensored Mean (U01-U04)  |  546.5 |    209.5 |    539.0 |     541.0 |
+Uncensored Median (U01-U04) |  186.5 |    112.5 |    165.0 |     165.0 |
+======================================================================================
+
+Decision-Level Backoff Breakdown for Arm 2c (Bigram Free Close):
+Task                       | D1 (Context) | D2 (Slot)  | D3 (Uniform) | Total Decisions
+----------------------------------------------------------------------------
+H01_filter_odds            |            7 |         10 |            0 |              17
+H02_double_evens           |           31 |         31 |            0 |              62
+H03_add_two_positives      |           31 |         29 |            0 |              60
+H04_count_evens            |           12 |          2 |            0 |              14
+H05_count_odds             |           16 |         11 |            0 |              27
+H06_sum_evens              |           24 |         15 |            0 |              39
+H07_sum_positives          |           20 |         14 |            0 |              34
+H08_double_positive_evens  |          295 |        243 |            0 |             538
+H09_sum_doubled_evens      |           74 |         75 |            0 |             149
+H10_sum_add1_evens         |           86 |        113 |            0 |             199
+======================================================================================
+
+Sensitivity Analysis: Laplace Smoothing Alpha Sweep on Novel Primitives (U01-U04):
+Alpha    | Bigram U01-U04 Executions      | Bigram Mean  | Unigram Mean
+------------------------------------------------------------------------
+0.01     | [1258, 360, 241, 1795]         |       913.5 |       878.0
+0.05     | [1258, 360, 241, 1763]         |       905.5 |       870.0
+0.10     | [1258, 328, 225, 1763]         |       893.5 |       862.0
+0.20     | [874, 296, 131, 1763]          |       766.0 |       751.0
+0.50     | [330, 120, 67, 2071]           |       647.0 |       638.0
+1.00     | [186, 144, 39, 1795]           |       541.0 |       539.0
+2.00     | [178, 144, 37, 1795]           |       538.5 |       536.0
+5.00     | [178, 144, 39, 1795]           |       539.0 |       537.0
+10.00    | [178, 144, 37, 1795]           |       538.5 |       536.0
+======================================================================================
+
+Sensitivity Analysis: 50 Random Tie-Break Seeds for Uniform Best-First Search:
+Uniform Mean across 50 seeds:   227.1 +/- 55.9 (min 133.8, max 394.5)
+Uniform Median across 50 seeds: 61.9 +/- 22.4 (min 19.5, max 125.0)
+======================================================================================
+
+Methodological Reporting Notes:
+  1. Depth-3 Diagnostic Reading: Depth 3 has 150 transitions from 25 synthetic programs.
+     Because transitions within a program are not independent, the 37.3% vs 32.8% difference
+     is reported descriptively with no statistical superiority claim.
+  2. Heap Keys: Unified tuple key (depth, len(prims), is_partial, tuple(prims), item_counter)
+     used throughout, guaranteeing strict type safety under score ties.
+  3. Backoff Labels: Tracked once per slot expansion decision (D1_context, D2_slot, D3_uniform),
+     not per-option candidate lookup.
+  4. Hidden Suite: All solutions verified 20/20 against pure-Python references on pinned inputs.
+  5. Free vs. Priced Close Invariance: Condition 4 and Condition 5 are equivalent by construction
+     because every valid candidate program performs exactly one leaf-closure action (xs),
+     shifting all complete program scores by constant -lambda and preserving relative priority.
+  6. Type-Conditioning Dominance: In this typed DSL, ScalarOp, Predicate, and Reducer slots belong
+     to exactly one parent combinator, so type validity alone enforces parent-combinator matching;
+     transition context only influences ListExpr combinator-to-combinator nesting.
+======================================================================================

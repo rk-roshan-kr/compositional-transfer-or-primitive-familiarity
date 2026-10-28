@@ -1,0 +1,42 @@
+====================================================================================================
+  PATH A FEASIBILITY AUDIT: TOTAL-ORDER COMPARATOR & DUAL RANK ANALYSIS
+====================================================================================================
+Programs at Depth 0:                1     (Cumulative: 1)
+Programs at Depth 1:                18    (Cumulative: 19)
+Programs at Depth 2:                252   (Cumulative: 271)
+Programs at Depth 3:                3528  (Cumulative: 3799)
+
+Total Syntactic Search Space at D <= 3: 3799 programs.
+Total Order Comparator: (depth, size, category_idx, primitive_idx, child_key)
+
+----------------------------------------------------------------------------------------------------
+Task Name                    | Depth | Syn Rank | Dedup Rank | Canonical AST Solution
+----------------------------------------------------------------------------------------------------
+T01_sum                      | 1     | 17       | 16         | fold(0, lambda acc, x: acc + x, xs)
+T02_count                    | 1     | 2        | 2          | len(xs)
+T03_double_all               | 1     | 8        | 7          | map(lambda x: (x * 2), xs)
+T04_add_one                  | 1     | 4        | 3          | map(lambda x: (x + 1), xs)
+T05_filter_positive          | 1     | 11       | 10         | filter(lambda x: (x > 0), xs)
+T06_filter_evens             | 1     | 14       | 13         | filter(lambda x: (x % 2 == 0), xs)
+T07_count_positive           | 2     | 28       | 20         | len(filter(lambda x: (x > 0), xs))
+T08_sum_doubled              | 2     | 235      | 117        | fold(0, lambda acc, x: acc + x, map(lambda x: (x * 2), xs))
+T09_add_two_all              | 1     | 5        | 4          | map(lambda x: (x + 2), xs)
+T10_filter_ge0               | 1     | 12       | 11         | filter(lambda x: (x >= 0), xs)
+H01_filter_odds              | 1     | 15       | 14         | filter(lambda x: (not (x % 2 == 0)), xs)
+H02_double_evens             | 2     | 115      | 74         | map(lambda x: (x * 2), filter(lambda x: (x % 2 == 0), xs))
+H03_add_two_positives        | 2     | 70       | 39         | map(lambda x: (x + 2), filter(lambda x: (x > 0), xs))
+H04_count_evens              | 2     | 31       | 23         | len(filter(lambda x: (x % 2 == 0), xs))
+H05_count_odds               | 2     | 32       | 24         | len(filter(lambda x: (not (x % 2 == 0)), xs))
+H06_sum_evens                | 2     | 241      | 119        | fold(0, lambda acc, x: acc + x, filter(lambda x: (x % 2 == 0), xs))
+H07_sum_positives            | 2     | 238      | 116        | fold(0, lambda acc, x: acc + x, filter(lambda x: (x > 0), xs))
+H08_double_positive_evens    | 3     | 1571     | 395        | map(lambda x: (x * 2), filter(lambda x: (x > 0), filter(lambda x: (x % 2 == 0), xs)))
+H09_sum_doubled_evens        | 3     | 3293     | 543        | fold(0, lambda acc, x: acc + x, map(lambda x: (x * 2), filter(lambda x: (x % 2 == 0), xs)))
+H10_sum_add1_evens           | 3     | 3237     | 503        | fold(0, lambda acc, x: acc + x, map(lambda x: (x + 1), filter(lambda x: (x % 2 == 0), xs)))
+
+====================================================================================================
+HELD-OUT TASKS SUMMARY (N = 10):
+  Syntactic Ranks:         [15, 31, 32, 70, 115, 238, 241, 1571, 3237, 3293]
+  Dedup Execution Ranks:   [14, 23, 24, 39, 74, 116, 119, 395, 503, 543]
+  Solved at K = 500 under Syntactic Order: 7/10
+  Solved at K = 500 under Dedup Order:     8/10
+====================================================================================================

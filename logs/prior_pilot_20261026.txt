@@ -1,0 +1,42 @@
+﻿============================================================================
+Path A Arm 2 Pilot: Count-Based Prior with Best-First Search (beta = 0)
+Execution Budget Cap: K = 500 per task | Parsimony Penalty lambda = 0.05
+============================================================================
+Loaded exactly 22 training transitions from T01-T10 solutions.
+----------------------------------------------------------------------------
+Running Gate 1 Diagnostic (50 Synthetic ASTs, 239 Transitions)...
+Gate 1 Diagnostic Top-1 Accuracy: 81/239 (33.9%) vs Chance (33.0%)
+  Depth 1: 2/10 (20.0%) vs Chance (36.0%)
+  Depth 2: 23/79 (29.1%) vs Chance (33.1%)
+  Depth 3: 56/150 (37.3%) vs Chance (32.8%)
+----------------------------------------------------------------------------
+Executing Arm 2 Best-First Search across 10 Held-Out Tasks:
+Task: H01_filter_odds            | Solved: yes | Executions:   14 | Expansions:    21 | Backoff: L1=44, L2=28 | Solution: filter(lambda x: (not (x % 2 == 0)), xs)
+Task: H02_double_evens           | Solved: yes | Executions:   27 | Expansions:    65 | Backoff: L1=212, L2=68 | Solution: map(lambda x: (x * 2), filter(lambda x: (x % 2 == 0), xs))
+Task: H03_add_two_positives      | Solved: yes | Executions:   23 | Expansions:    65 | Backoff: L1=212, L2=68 | Solution: map(lambda x: (x + 2), filter(lambda x: (x > 0), xs))
+Task: H04_count_evens            | Solved: yes | Executions:    7 | Expansions:    15 | Backoff: L1=55, L2=6 | Solution: len(filter(lambda x: (x % 2 == 0), xs))
+Task: H05_count_odds             | Solved: yes | Executions:   16 | Expansions:    29 | Backoff: L1=83, L2=26 | Solution: len(filter(lambda x: (not (x % 2 == 0)), xs))
+Task: H06_sum_evens              | Solved: yes | Executions:   20 | Expansions:    42 | Backoff: L1=139, L2=36 | Solution: fold(0, lambda acc, x: acc + x, filter(lambda x: (x % 2 == 0), xs))
+Task: H07_sum_positives          | Solved: yes | Executions:   18 | Expansions:    34 | Backoff: L1=111, L2=28 | Solution: fold(0, lambda acc, x: acc + x, filter(lambda x: (x > 0), xs))
+Task: H08_double_positive_evens  | Solved: yes | Executions:  235 | Expansions:   545 | Backoff: L1=2060, L2=420 | Solution: map(lambda x: (x * 2), filter(lambda x: (x % 2 == 0), filter(lambda x: (x > 0), xs)))
+Task: H09_sum_doubled_evens      | Solved: yes | Executions:   82 | Expansions:   152 | Backoff: L1=489, L2=96 | Solution: fold(0, lambda acc, x: acc + x, map(lambda x: (x * 2), filter(lambda x: (x % 2 == 0), xs)))
+Task: H10_sum_add1_evens         | Solved: yes | Executions:  120 | Expansions:   206 | Backoff: L1=573, L2=112 | Solution: fold(0, lambda acc, x: acc + x, map(lambda x: (x + 1), filter(lambda x: (x % 2 == 0), xs)))
+----------------------------------------------------------------------------
+Summary:
+  Arm 2 Solved: 10 / 10 (100.0%) [Enum Baseline: 7 / 10]
+  Arm 2 Mean Executions: 56.2 (unsolved capped at 500) [Enum Baseline: 224.2]
+============================================================================
+Gate 1 Diagnostic Table:
+  Depth    | Correct/Total  | Prior Top-1 Acc  | Chance Baseline 
+  -------- | -------------- | ---------------- | ----------------
+  Depth 1  |   2/10        |          20.0% |          36.0%
+  Depth 2  |  23/79        |          29.1% |          33.1%
+  Depth 3  |  56/150       |          37.3% |          32.8%
+  -------- | -------------- | ---------------- | ----------------
+  Overall  |  81/239       |          33.9% |          33.0%
+============================================================================
+Limitations:
+  1. Only 10 training programs (22 transitions).
+  2. Vocabulary and held-out tasks were chosen by the same process, so generalization claims are limited to this benchmark.
+  3. Evaluations were executed using in-process AST reference interpreter, not isolated subprocess sandboxes.
+============================================================================
